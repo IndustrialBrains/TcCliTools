@@ -18,9 +18,9 @@
     :alt: Project generated with PyScaffold
     :target: https://pyscaffold.org/
 
-.. image:: https://readthedocs.org/projects/TcCliTools/badge/?version=latest
+.. image:: https://readthedocs.org/projects/tcclitools/badge/?version=latest
     :alt: ReadTheDocs
-    :target: https://TcCliTools.readthedocs.io/en/stable/
+    :target: https://tcclitools.readthedocs.io/en/latest/
 
 .. image:: https://img.shields.io/coveralls/github/IndustrialBrains/TcCliTools/main.svg
     :alt: Coveralls
