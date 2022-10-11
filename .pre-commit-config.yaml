@@ -11,6 +11,7 @@ repos:
   - id: check-added-large-files
   - id: check-ast
   - id: check-json
+    exclude: ^.vscode/
   - id: check-merge-conflict
   - id: check-xml
   - id: check-yaml
@@ -58,6 +59,7 @@ repos:
   rev: v0.982
   hooks:
     - id: mypy
-      exclude: ^tests/
+      exclude:
+        ^tests/
       args: [--strict, --ignore-missing-imports]
       additional_dependencies: [packaging]
