@@ -56,4 +56,5 @@ repos:
   hooks:
     - id: mypy
       exclude: ^tests/
-      args: [--strict]
+      args: [--strict, --ignore-missing-imports]
+      additional_dependencies: [packaging]

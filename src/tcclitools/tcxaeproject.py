@@ -41,4 +41,4 @@ class TcXaeProject(UniquePath):
 
             self._plc_projects = set(projects)
 
-        return self._plc_projects  # type:ignore
+        return self._plc_projects

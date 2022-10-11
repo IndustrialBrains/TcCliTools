@@ -27,4 +27,4 @@ class TcPlcProject(UniquePath):
                 )
                 for placeholder in self.xmlroot.findall(".//{*}PlaceholderReference")
             }
-        return self._library_references  # type:ignore
+        return self._library_references

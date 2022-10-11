@@ -9,7 +9,7 @@ from tcclitools.tcxaeproject import TcXaeProject
 RESOURCE_PATH = Path(".") / "tests" / "resources"
 
 
-def test_get_plc_projects():
+def test_get_plc_projects() -> None:
     path = RESOURCE_PATH / "MultiplePlcs" / "MultiplePlcs"
     solution = TcXaeProject(path / "MultiplePlcs.tsproj")
     expected = {
@@ -19,7 +19,7 @@ def test_get_plc_projects():
     assert expected == solution.plc_projects
 
 
-def test_get_independent_plc_project():
+def test_get_independent_plc_project() -> None:
     path = RESOURCE_PATH / "IndependentProjectFile" / "IndependentProjectFile"
     solution = TcXaeProject(path / "IndependentProjectFile.tsproj")
     expected = {

@@ -11,7 +11,7 @@ from tcclitools.tclibrary.tclibraryreference import TcLibraryReference
 RESOURCE_PATH = Path(".") / "tests" / "resources"
 
 
-def test_library_from_project():
+def test_library_from_project() -> None:
     path = (
         RESOURCE_PATH
         / "PlcLibrary"
@@ -25,7 +25,7 @@ def test_library_from_project():
     assert lib.company == "Industrial Brains B.V."
 
 
-def test_as_reference():
+def test_as_reference() -> None:
     path = (
         RESOURCE_PATH
         / "PlcLibrary"
@@ -37,7 +37,7 @@ def test_as_reference():
     assert lib.as_reference() == TcLibraryReference(lib.title, lib.version, lib.company)
 
 
-def test_library_from_repository():
+def test_library_from_repository() -> None:
     company = "Beckhoff Automation GmbH"
     title = "Tc2_Standard"
     version_str = "3.3.3.0"
@@ -50,6 +50,6 @@ def test_library_from_repository():
     assert lib.version == version_module.parse(version_str)
 
 
-def test_all_libraries_in_repository():
+def test_all_libraries_in_repository() -> None:
     path = RESOURCE_PATH / "Managed Libraries"
     assert len(TcLibrary.get_library_repository(path)) == 2

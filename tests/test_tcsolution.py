@@ -9,7 +9,7 @@ from tcclitools.tcxaeproject import TcXaeProject
 RESOURCE_PATH = Path(".") / "tests" / "resources"
 
 
-def test_get_xae_projects():
+def test_get_xae_projects() -> None:
     path = RESOURCE_PATH / "Solution"
     solution = TcSolution(path / "Solution.sln")
     expected = {

@@ -1,4 +1,5 @@
 """ A base class for objects that are uniquely based on a file or path"""
+from __future__ import annotations
 
 from pathlib import Path
 
@@ -42,7 +43,9 @@ class UniquePath:
                 f"'{self.path}' does not match expected type: {type_string}"
             )
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, UniquePath):
+            return NotImplemented
         return self.path == other.path
 
     def __repr__(self) -> str:

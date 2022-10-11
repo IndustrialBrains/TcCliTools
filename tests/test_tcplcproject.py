@@ -17,7 +17,7 @@ RESOURCE_PATH = (
 )
 
 
-def test_get_libraries():
+def test_get_libraries() -> None:
     plcproject = TcPlcProject(RESOURCE_PATH)
     version = "*"
     company = "Beckhoff Automation GmbH"

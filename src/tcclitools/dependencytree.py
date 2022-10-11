@@ -56,13 +56,13 @@ class DependencyTree:
 
         missing_libraries: list[TcLibraryReference] = []
 
-        def traverse(parent: Node):
+        def traverse(parent: Node) -> None:
             """Recursively create child nodes for all library references in the parent node"""
             for required_library in parent.solution.library_references:
                 child = Node(str(required_library), parent=parent)
 
                 # Check if the library is available
-                (matching_solution, matching_library) = next(  # type:ignore
+                (matching_solution, matching_library) = next(
                     (
                         (sol, lib)
                         for (sol, lib) in available_libraries

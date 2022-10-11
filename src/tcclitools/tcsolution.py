@@ -31,7 +31,7 @@ class TcSolution(UniquePath):
                     if match:
                         projects.append(TcXaeProject(self.path.parent / match.group(1)))
             self._xae_projects = set(projects)
-        return self._xae_projects  # type:ignore
+        return self._xae_projects
 
     @property
     def library_references(self) -> set[TcLibraryReference]:
@@ -43,4 +43,4 @@ class TcSolution(UniquePath):
                 for plc_project in xae_project.plc_projects
                 for library in plc_project.library_references
             }
-        return self._library_references  # type:ignore
+        return self._library_references

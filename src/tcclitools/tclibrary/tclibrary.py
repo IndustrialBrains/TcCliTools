@@ -15,9 +15,6 @@ from .tclibraryreference import TcLibraryReference
 class TcLibrary(TcLibraryReference, UniquePath):
     """A TwinCAT library"""
 
-    # https://stackoverflow.com/questions/53518981/inheritance-hash-sets-to-none-in-a-subclass
-    __hash__ = UniquePath.__hash__  # type:ignore
-
     def __init__(
         self,
         path: Path,
@@ -44,9 +41,7 @@ class TcLibrary(TcLibraryReference, UniquePath):
                 full_name = (
                     ElementTree.parse(path_browsercache).getroot().attrib["Name"]
                 )
-                (title, version, company) = self.parse_string(  # type:ignore
-                    full_name
-                )
+                (title, version, company) = self.parse_string(full_name)
             except Exception as exc:
                 raise TcLibraryException(
                     f'Invalid browsercache file: "{path_browsercache}"'
@@ -68,11 +63,11 @@ class TcLibrary(TcLibraryReference, UniquePath):
         TcLibraryReference.__init__(
             self,
             title=title,
-            version=version,  # type:ignore
+            version=version,
             company=company,
         )
 
-    def as_reference(self):
+    def as_reference(self) -> TcLibraryReference:
         """Return a TcLibraryReference instance"""
         return TcLibraryReference(self.title, self.version, self.company)
 
@@ -91,3 +86,7 @@ class TcLibrary(TcLibraryReference, UniquePath):
             libs.append(TcLibrary(path.parent))
 
         return libs
+
+    def __hash__(self) -> int:  # pylint:disable=useless-parent-delegation
+        # https://stackoverflow.com/questions/53518981/inheritance-hash-sets-to-none-in-a-subclass
+        return super().__hash__()

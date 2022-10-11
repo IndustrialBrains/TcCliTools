@@ -13,19 +13,23 @@ class TcLibraryReference:
 
     _RE_LIBRARY_REF = re.compile(r"^(.*), (.*) \((.*)\)")
 
-    def __init__(self, title, version, company):
+    def __init__(
+        self, title: str, version: str | version_module.Version, company: str
+    ) -> None:
         self.title: str = title
-        self.version: str | version_module.Version = version
+        self.version: str | version_module.Version = (
+            version if version == "*" else version_module.Version(str(version))
+        )
         self.company: str = company
 
-    def is_any_version(self):
+    def is_any_version(self) -> bool:
         """Return True if version is any (e.g., "*")"""
         return isinstance(self.version, str) and self.version == "*"
 
     @staticmethod
     def parse_string(
-        full_name,
-    ) -> tuple[str, str | version_module.Version, str] | None:
+        full_name: str,
+    ) -> tuple[str, str | version_module.Version, str]:
         """Retrieve title, version and company from a string
         that matches the Beckhoff format
         (e.g, `"Tc2_Standard, 3.3.3.0 (Beckhoff Automation GmbH)"`)
@@ -44,7 +48,7 @@ class TcLibraryReference:
             raise TcLibraryException(f'Invalid library string: "{full_name}"') from exc
 
     @staticmethod
-    def from_string(full_name):
+    def from_string(full_name: str) -> TcLibraryReference:
         """Create a TcLibraryReference instance from a string
         that matches the Beckhoff format
         (e.g, `"Tc2_Standard, 3.3.3.0 (Beckhoff Automation GmbH)"`)
@@ -87,25 +91,42 @@ class TcLibraryReference:
     def __repr__(self) -> str:
         return f'{self.__class__.__name__}("{self.title}", "{self.version}", "{self.company}")'
 
-    def __eq__(self, other) -> bool:
-        return isinstance(other, TcLibraryReference) and (
+    def _equal_title_and_company(self, other: TcLibraryReference) -> bool:
+        return (
+            self.title.lower() == other.title.lower()
+            and self.company.lower() == other.company.lower()
+        )
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, TcLibraryReference):
+            return NotImplemented
+        return self._equal_title_and_company(other) and (
             (
                 (self.version == other.version)
                 or self.is_any_version()
                 or other.is_any_version()
             )
-            and self.title.lower() == other.title.lower()
-            and self.company.lower() == other.company.lower()
         )
 
-    def __gt__(self, other) -> bool:
-        return (
-            (self.is_any_version() or (self.version > other.version))
-            and self.title.lower() == other.title.lower()
-            and self.company.lower() == other.company.lower()
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, TcLibraryReference):
+            return NotImplemented
+        if isinstance(other.version, str):
+            raise NotImplementedError(
+                f"Cannot compare versions of {self} and"
+                "{other}: version {other.version} not allowed"
+            )
+        return self._equal_title_and_company(other) and (
+            self.is_any_version()
+            or (
+                isinstance(self.version, version_module.Version)
+                and (self.version > other.version)
+            )
         )
 
-    def __ge__(self, other) -> bool:
+    def __ge__(self, other: object) -> bool:
+        if not isinstance(other, TcLibraryReference):
+            return NotImplemented
         return self.__gt__(other) or self.__eq__(other)
 
     def __hash__(self) -> int:

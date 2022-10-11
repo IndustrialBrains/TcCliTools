@@ -11,17 +11,17 @@ from tcclitools.uniquepath import UniquePath, UniquePathException
 RESOURCE_PATH = Path(".") / "tests" / "resources"
 
 
-def test_no_file():
+def test_no_file() -> None:
     with pytest.raises(UniquePathException):
         UniquePath(RESOURCE_PATH)
 
 
-def test_any_extension():
+def test_any_extension() -> None:
     UniquePath(RESOURCE_PATH / "emptyfile")
 
 
-def test_suffix():
-    class DerivedClass(UniquePath):
+def test_suffix() -> None:
+    class DerivedClass(UniquePath):  # type:ignore
         def __init__(self, path: Path):
             self._allowed_types = [".extension"]
             super().__init__(path)
@@ -29,8 +29,8 @@ def test_suffix():
     DerivedClass(RESOURCE_PATH / "filewith.extension")
 
 
-def test_directory():
-    class DerivedClass(UniquePath):
+def test_directory() -> None:
+    class DerivedClass(UniquePath):  # type:ignore
         def __init__(self, path: Path):
             self._allowed_types = [None]
             super().__init__(path)
@@ -38,8 +38,8 @@ def test_directory():
     DerivedClass(RESOURCE_PATH)
 
 
-def test_no_directory():
-    class DerivedClass(UniquePath):
+def test_no_directory() -> None:
+    class DerivedClass(UniquePath):  # type:ignore
         def __init__(self, path: Path):
             self._allowed_types = [None]
             super().__init__(path)
