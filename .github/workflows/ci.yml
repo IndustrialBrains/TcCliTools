@@ -55,7 +55,6 @@ jobs:
       matrix:
         python:
         - "3.10"
-        - "3.11"
         platform:
         - windows-latest
     runs-on: ${{ matrix.platform }}
