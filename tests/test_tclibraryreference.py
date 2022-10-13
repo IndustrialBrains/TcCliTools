@@ -4,7 +4,6 @@
 import pytest
 from packaging import version as version_module
 
-from tcclitools.exceptions import MissingLibrariesError
 from tcclitools.tclibraryreference import TcLibraryReference
 
 TITLE = "foo"

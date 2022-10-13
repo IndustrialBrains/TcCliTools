@@ -9,7 +9,7 @@ from .tclibraryreference import TcLibraryReference
 from .uniquepath import UniquePath
 
 
-class TcPlcProject(UniquePath):
+class TcPlcProject(UniquePath):  # pylint:disable=too-few-public-methods
     """A TwinCAT PLC Project"""
 
     def __init__(self, path: Path):

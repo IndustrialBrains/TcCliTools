@@ -65,13 +65,13 @@ class TcLibraryReference:
             return references[0]
         # Assert that all libraries have the same title and company
         if any(
-            [
+            (
                 (
                     ref.title != references[0].title
                     or ref.company != references[0].company
                 )
                 for ref in references
-            ]
+            )
         ):
             raise ValueError(
                 "Library references do not have matching title and company"

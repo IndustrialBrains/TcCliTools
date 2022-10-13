@@ -3,8 +3,14 @@
 [![Coveralls](https://img.shields.io/coveralls/github/IndustrialBrains/TcCliTools/main.svg)](https://coveralls.io/r/IndustrialBrains/TcCliTools)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
+[![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
 [![CI](https://github.com/IndustrialBrains/TcCliTools/actions/workflows/ci.yml/badge.svg)](https://github.com/IndustrialBrains/TcCliTools/actions)
 [![security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=IndustrialBrains_TcCliTools&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=IndustrialBrains_TcCliTools)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=IndustrialBrains_TcCliTools&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=IndustrialBrains_TcCliTools)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=IndustrialBrains_TcCliTools&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=IndustrialBrains_TcCliTools)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=IndustrialBrains_TcCliTools&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=IndustrialBrains_TcCliTools)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=IndustrialBrains_TcCliTools&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=IndustrialBrains_TcCliTools)
 
 # TwinCAT CLI tools
 

@@ -9,7 +9,7 @@ from .tcplcproject import TcPlcProject
 from .uniquepath import UniquePath
 
 
-class TcXaeProject(UniquePath):
+class TcXaeProject(UniquePath):  # pylint:disable=too-few-public-methods
     """A TwinCAT XAE Project"""
 
     def __init__(self, path: Path):

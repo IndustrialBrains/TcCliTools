@@ -20,7 +20,7 @@ class UniquePath:
 
     """
 
-    _allowed_types: list[str | None] = list()
+    _allowed_types: list[str | None] = []
 
     def __init__(self, path: Path):
         self.path = path.resolve()

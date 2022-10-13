@@ -34,15 +34,18 @@ class DependencyTree:
                 if isinstance(item, TcSolution):
                     # Get all PLC projects in the solution, and add those
                     # which can be installed as a library to the list
-                    for xae_project in item.xae_projects:
-                        for plc_project in xae_project.plc_projects:
-                            try:
-                                library = TcLibrary(plc_project.path)
-                            except TcCliToolsException:
-                                # ignore all failed attempts to convert PLC project to library
-                                continue
-                            lib_reference = library.as_reference()
-                            lib_solution = item
+                    for plc_project in (
+                        plc_project
+                        for xae_project in item.xae_projects
+                        for plc_project in xae_project.plc_projects
+                    ):
+                        try:
+                            library = TcLibrary(plc_project.path)
+                        except TcCliToolsException:
+                            # ignore all failed attempts to convert PLC project to library
+                            continue
+                        lib_reference = library.as_reference()
+                        lib_solution = item
                 elif isinstance(item, TcLibrary):
                     lib_reference = item.as_reference()
                 elif isinstance(item, TcLibraryReference):
