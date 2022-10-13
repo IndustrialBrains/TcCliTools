@@ -8,7 +8,7 @@ from packaging import version as version_module
 
 from tcclitools.uniquepath import UniquePath
 
-from . import TcLibraryException
+from .exceptions import InvalidFileError
 from .tclibraryreference import TcLibraryReference
 
 
@@ -43,7 +43,7 @@ class TcLibrary(TcLibraryReference, UniquePath):
                 )
                 (title, version, company) = self.parse_string(full_name)
             except Exception as exc:
-                raise TcLibraryException(
+                raise InvalidFileError(
                     f'Invalid browsercache file: "{path_browsercache}"'
                 ) from exc
 
@@ -58,7 +58,7 @@ class TcLibrary(TcLibraryReference, UniquePath):
                 ]
                 version = version_module.parse(version)  # type:ignore
             except Exception as exc:
-                raise TcLibraryException(f'Not a valid library: "{path}"') from exc
+                raise InvalidFileError(f'Not a valid library: "{path}"') from exc
 
         TcLibraryReference.__init__(
             self,

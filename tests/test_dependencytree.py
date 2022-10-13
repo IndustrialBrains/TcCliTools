@@ -8,7 +8,7 @@ from anytree import Node
 
 from tcclitools.dependencytree import (
     DependencyTree,
-    DependencyTreeException,
+    MissingLibrariesError,
     get_all_solutions,
 )
 from tcclitools.tclibrary import TcLibraryReference
@@ -75,5 +75,5 @@ def test_get_build_order() -> None:
 
 
 def test_get_build_order_missing_library() -> None:
-    with pytest.raises(DependencyTreeException):
+    with pytest.raises(MissingLibrariesError):
         DependencyTree(DEP_ON_LIB_A).get_build_order()

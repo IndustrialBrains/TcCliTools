@@ -5,8 +5,6 @@ import re
 
 from packaging import version as version_module
 
-from .exceptions import TcLibraryException
-
 
 class TcLibraryReference:
     """A TwinCAT library reference"""
@@ -45,7 +43,7 @@ class TcLibraryReference:
                 company,
             )
         except Exception as exc:
-            raise TcLibraryException(f'Invalid library string: "{full_name}"') from exc
+            raise ValueError(f'Invalid library string: "{full_name}"') from exc
 
     @staticmethod
     def from_string(full_name: str) -> TcLibraryReference:
@@ -75,7 +73,7 @@ class TcLibraryReference:
                 for ref in references
             ]
         ):
-            raise TcLibraryException(
+            raise ValueError(
                 "Library references do not have matching title and company"
             )
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-from .tclibrary import TcLibraryReference
+from .tclibraryreference import TcLibraryReference
 from .tcxaeproject import TcXaeProject
 from .uniquepath import UniquePath
 

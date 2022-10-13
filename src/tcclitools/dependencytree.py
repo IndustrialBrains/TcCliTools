@@ -4,12 +4,10 @@ from typing import Iterable
 
 from anytree import LevelOrderGroupIter, Node, RenderTree
 
-from .tclibrary import TcLibrary, TcLibraryException, TcLibraryReference
+from .exceptions import MissingLibrariesError, TcCliToolsException
+from .tclibrary import TcLibrary
+from .tclibraryreference import TcLibraryReference
 from .tcsolution import TcSolution
-
-
-class DependencyTreeException(Exception):
-    """DependencyTree exception base class"""
 
 
 class DependencyTree:
@@ -40,8 +38,8 @@ class DependencyTree:
                         for plc_project in xae_project.plc_projects:
                             try:
                                 library = TcLibrary(plc_project.path)
-                            except TcLibraryException:
-                                # ignore failed attempt to convert PLC project to library
+                            except TcCliToolsException:
+                                # ignore all failed attempts to convert PLC project to library
                                 continue
                             lib_reference = library.as_reference()
                             lib_solution = item
@@ -104,7 +102,7 @@ class DependencyTree:
         """Return the build order of all solutions in the dependency tree"""
 
         if self.missing_libraries:
-            raise DependencyTreeException(
+            raise MissingLibrariesError(
                 f"Unable to generate build order, missing libraries: {self.missing_libraries}"
             )
 

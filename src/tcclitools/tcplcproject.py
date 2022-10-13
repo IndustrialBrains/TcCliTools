@@ -4,7 +4,7 @@ from __future__ import annotations
 from pathlib import Path
 from xml.etree import ElementTree
 
-from .tclibrary import TcLibraryReference
+from .tclibraryreference import TcLibraryReference
 from .uniquepath import UniquePath
 
 

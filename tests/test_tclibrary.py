@@ -6,7 +6,7 @@ from pathlib import Path
 from packaging import version as version_module
 
 from tcclitools.tclibrary import TcLibrary
-from tcclitools.tclibrary.tclibraryreference import TcLibraryReference
+from tcclitools.tclibraryreference import TcLibraryReference
 
 RESOURCE_PATH = Path(".") / "tests" / "resources"
 

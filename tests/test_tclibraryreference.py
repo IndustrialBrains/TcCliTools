@@ -4,7 +4,8 @@
 import pytest
 from packaging import version as version_module
 
-from tcclitools.tclibrary import TcLibraryException, TcLibraryReference
+from tcclitools.exceptions import MissingLibrariesError
+from tcclitools.tclibraryreference import TcLibraryReference
 
 TITLE = "foo"
 COMPANY = "bar"
@@ -57,7 +58,7 @@ def test_from_string() -> None:
 
 
 def test_parse_invalid_library_string() -> None:
-    with pytest.raises(TcLibraryException):
+    with pytest.raises(ValueError):
         TcLibraryReference.parse_string("foobar")
 
 
@@ -71,5 +72,5 @@ def test_select_latest() -> None:
 def test_select_invalid_latest() -> None:
     lib_a = TcLibraryReference("foo", "1", "bar")
     lib_b = TcLibraryReference("bar", "2", "foo")
-    with pytest.raises(TcLibraryException):
+    with pytest.raises(ValueError):
         TcLibraryReference.select_latest([lib_a, lib_b])
