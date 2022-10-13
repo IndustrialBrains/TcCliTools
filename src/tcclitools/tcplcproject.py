@@ -2,7 +2,8 @@
 from __future__ import annotations
 
 from pathlib import Path
-from xml.etree import ElementTree
+
+from defusedxml import ElementTree
 
 from .tclibraryreference import TcLibraryReference
 from .uniquepath import UniquePath
@@ -23,7 +24,7 @@ class TcPlcProject(UniquePath):
         if self._library_references is None:
             self._library_references = {
                 TcLibraryReference.from_string(
-                    placeholder.find("{*}DefaultResolution").text  # type:ignore
+                    placeholder.find("{*}DefaultResolution").text
                 )
                 for placeholder in self.xmlroot.findall(".//{*}PlaceholderReference")
             }

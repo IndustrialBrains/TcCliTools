@@ -2,8 +2,8 @@
 from __future__ import annotations
 
 from pathlib import Path
-from xml.etree import ElementTree
 
+from defusedxml import ElementTree
 from packaging import version as version_module
 
 from tcclitools.uniquepath import UniquePath
@@ -50,10 +50,8 @@ class TcLibrary(TcLibraryReference, UniquePath):
         else:  # Must be a .plcproj file
             try:
                 xmlroot = ElementTree.parse(path).getroot()
-                (title, version, company) = [  # type:ignore
-                    xmlroot.find(
-                        "./{*}PropertyGroup/{*}" + find_str
-                    ).text  # type:ignore
+                (title, version, company) = [
+                    xmlroot.find("./{*}PropertyGroup/{*}" + find_str).text
                     for find_str in ["Title", "ProjectVersion", "Company"]
                 ]
                 version = version_module.parse(version)  # type:ignore

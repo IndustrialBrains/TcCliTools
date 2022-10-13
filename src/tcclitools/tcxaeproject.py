@@ -2,7 +2,8 @@
 from __future__ import annotations
 
 from pathlib import Path
-from xml.etree import ElementTree
+
+from defusedxml import ElementTree
 
 from .tcplcproject import TcPlcProject
 from .uniquepath import UniquePath
@@ -36,7 +37,7 @@ class TcXaeProject(UniquePath):
                             f"Missing independent project file: {xti_file.absolute()}"
                         )
                     xmlroot = ElementTree.parse(xti_file).getroot()
-                    prj_path = xmlroot.find(".//{*}Project").attrib["PrjFilePath"]  # type: ignore
+                    prj_path = xmlroot.find(".//{*}Project").attrib["PrjFilePath"]
                     projects.append(TcPlcProject(xti_path / prj_path))
 
             self._plc_projects = set(projects)

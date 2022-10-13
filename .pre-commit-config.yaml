@@ -54,9 +54,10 @@ repos:
       exclude:
         ^tests/
       args: [--strict, --ignore-missing-imports]
-      additional_dependencies: [packaging]
+      additional_dependencies: [packaging, defusedxml]
 
 - repo: https://github.com/PyCQA/bandit
   rev: 1.7.4
   hooks:
     - id: bandit
+      exclude: ^tests/
