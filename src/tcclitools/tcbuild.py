@@ -19,8 +19,7 @@ def run(args: list[str]) -> tuple[int, str]:
 
     try:
         proc = subprocess.run(  # nosec
-            # ["tcbuild.exe"] + args,
-            ["D:/Git repos/TcBuild/TcBuild/bin/x64/Debug/tcbuild.exe"] + args,
+            ["tcbuild.exe"] + args,
             check=True,
             capture_output=True,
             encoding="utf-8",
