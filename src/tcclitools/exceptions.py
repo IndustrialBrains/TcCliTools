@@ -10,4 +10,8 @@ class MissingLibrariesError(TcCliToolsException):
 
 
 class InvalidFileError(TcCliToolsException):
-    """Inavlid file exception"""
+    """Invalid file exception"""
+
+
+class TcBuildInvokeError(TcCliToolsException):
+    """Error when invoking TcBuild"""
