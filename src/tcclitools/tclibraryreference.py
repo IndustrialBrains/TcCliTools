@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import re
 
-from packaging import version as version_module
+from packaging.version import Version, parse
 
 
 class TcLibraryReference:
@@ -11,12 +11,10 @@ class TcLibraryReference:
 
     _RE_LIBRARY_REF = re.compile(r"^(.*), (.*) \((.*)\)")
 
-    def __init__(
-        self, title: str, version: str | version_module.Version, company: str
-    ) -> None:
+    def __init__(self, title: str, version: str | Version, company: str) -> None:
         self.title: str = title
-        self.version: str | version_module.Version = (
-            version if version == "*" else version_module.Version(str(version))
+        self.version: str | Version = (
+            version if version == "*" else Version(str(version))
         )
         self.company: str = company
 
@@ -27,7 +25,7 @@ class TcLibraryReference:
     @staticmethod
     def parse_string(
         full_name: str,
-    ) -> tuple[str, str | version_module.Version, str]:
+    ) -> tuple[str, str | Version, str]:
         """Retrieve title, version and company from a string
         that matches the Beckhoff format
         (e.g, `"Tc2_Standard, 3.3.3.0 (Beckhoff Automation GmbH)"`)
@@ -39,7 +37,7 @@ class TcLibraryReference:
             company = res.group(3)  # type:ignore
             return (  # type:ignore
                 title,
-                version if version == "*" else version_module.parse(version),
+                version if version == "*" else parse(version),
                 company,
             )
         except Exception as exc:
@@ -116,10 +114,7 @@ class TcLibraryReference:
             )
         return self._equal_title_and_company(other) and (
             self.is_any_version()
-            or (
-                isinstance(self.version, version_module.Version)
-                and (self.version > other.version)
-            )
+            or (isinstance(self.version, Version) and (self.version > other.version))
         )
 
     def __ge__(self, other: object) -> bool:

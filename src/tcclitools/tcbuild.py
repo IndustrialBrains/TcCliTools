@@ -6,7 +6,7 @@ from packaging.version import InvalidVersion, Version
 
 from .exceptions import TcBuildInvokeError
 
-VERSION_MINIMAL = Version("1.0.0.0")
+VERSION_MINIMAL = Version("1.0.1.0")
 
 
 def run(args: list[str]) -> tuple[int, str]:

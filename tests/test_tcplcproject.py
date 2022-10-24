@@ -3,22 +3,20 @@
 
 from pathlib import Path
 
-from tcclitools.tclibrary import TcLibraryReference
+from tcclitools.tclibraryreference import TcLibraryReference
 from tcclitools.tcplcproject import TcPlcProject
 
-RESOURCE_PATH = (
-    Path(".")
-    / "tests"
-    / "resources"
-    / "PlcDefault"
-    / "PlcDefault"
-    / "StandardPlcProject"
-    / "StandardPlcProject.plcproj"
-)
+RESOURCE_PATH = Path(".") / "tests" / "resources"
 
 
 def test_get_libraries() -> None:
-    plcproject = TcPlcProject(RESOURCE_PATH)
+    plcproject = TcPlcProject(
+        RESOURCE_PATH
+        / "PlcDefault"
+        / "PlcDefault"
+        / "StandardPlcProject"
+        / "StandardPlcProject.plcproj"
+    )
     version = "*"
     company = "Beckhoff Automation GmbH"
     expected_libraries = {
@@ -26,4 +24,26 @@ def test_get_libraries() -> None:
         TcLibraryReference("Tc2_System", version, company),
         TcLibraryReference("Tc3_Module", version, company),
     }
-    assert expected_libraries == plcproject.library_references
+    assert expected_libraries == set(plcproject.library_references)
+
+
+def test_as_library() -> None:
+    plcproject = TcPlcProject(
+        RESOURCE_PATH
+        / "PlcLibrary"
+        / "PlcLibrary"
+        / "EmptyPlcProject"
+        / "EmptyPlcProject.plcproj"
+    )
+    assert plcproject.as_reference() is not None
+
+
+def test_as_library_fail() -> None:
+    plcproject = TcPlcProject(
+        RESOURCE_PATH
+        / "PlcDefault"
+        / "PlcDefault"
+        / "StandardPlcProject"
+        / "StandardPlcProject.plcproj"
+    )
+    assert plcproject.as_reference() is None

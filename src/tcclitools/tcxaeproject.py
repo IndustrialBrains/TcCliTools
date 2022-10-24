@@ -2,31 +2,37 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Iterable
 
 from defusedxml import ElementTree
 
 from .tcplcproject import TcPlcProject
+from .tctreeitem import TcTreeItem
 from .uniquepath import UniquePath
 
 
-class TcXaeProject(UniquePath):  # pylint:disable=too-few-public-methods
+class TcXaeProject(UniquePath, TcTreeItem):  # pylint:disable=too-few-public-methods
     """A TwinCAT XAE Project"""
 
-    def __init__(self, path: Path):
+    def __init__(self, path: Path, parent: TcTreeItem | None = None):
+        TcTreeItem.__init__(self, parent)
         self._allowed_types = [".tsproj", ".tspproj"]
-        super().__init__(path)
+        UniquePath.__init__(self, path)
         self.xmlroot = ElementTree.parse(path).getroot()
         self._plc_projects: set[TcPlcProject] | None = None
 
     @property
-    def plc_projects(self) -> set[TcPlcProject]:
+    def plc_projects(self) -> Iterable[TcPlcProject]:
         """PLC projects in the XAE project"""
         if self._plc_projects is None:
             projects: list[TcPlcProject] = []
             for project in self.xmlroot.findall(".//{*}Plc/Project"):
                 if "PrjFilePath" in project.attrib:
                     projects.append(
-                        TcPlcProject(self.path.parent / project.attrib["PrjFilePath"])
+                        TcPlcProject(
+                            self.path.parent / project.attrib["PrjFilePath"],
+                            parent=self,
+                        )
                     )
                 elif "File" in project.attrib:
                     # Independent project file
@@ -38,8 +44,7 @@ class TcXaeProject(UniquePath):  # pylint:disable=too-few-public-methods
                         )
                     xmlroot = ElementTree.parse(xti_file).getroot()
                     prj_path = xmlroot.find(".//{*}Project").attrib["PrjFilePath"]
-                    projects.append(TcPlcProject(xti_path / prj_path))
+                    projects.append(TcPlcProject(xti_path / prj_path, parent=self))
 
             self._plc_projects = set(projects)
-
-        return self._plc_projects
+        return iter(self._plc_projects)

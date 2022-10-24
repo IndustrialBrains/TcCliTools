@@ -51,3 +51,6 @@ MANIFEST
 .venv*/
 .conda*/
 .python-version
+
+# TwinCAT residue
+.library

@@ -3,7 +3,7 @@
 
 from pathlib import Path
 
-from tcclitools.tcplcproject import TcPlcProject  # pylint:disable=import-error
+from tcclitools.tcplcproject import TcPlcProject
 from tcclitools.tcxaeproject import TcXaeProject
 
 RESOURCE_PATH = Path(".") / "tests" / "resources"
@@ -16,7 +16,7 @@ def test_get_plc_projects() -> None:
         TcPlcProject(path / "PLC1" / "PLC1.plcproj"),
         TcPlcProject(path / "PLC2" / "PLC2.plcproj"),
     }
-    assert expected == solution.plc_projects
+    assert expected == set(solution.plc_projects)
 
 
 def test_get_independent_plc_project() -> None:
@@ -26,4 +26,4 @@ def test_get_independent_plc_project() -> None:
         TcPlcProject(path / "PLC1" / "PLC1.plcproj"),
         TcPlcProject(path / "PLC2" / "PLC2.plcproj"),
     }
-    assert expected == solution.plc_projects
+    assert expected == set(solution.plc_projects)

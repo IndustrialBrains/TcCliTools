@@ -1,6 +1,7 @@
 """Tests for the tcclitools TcSolution class"""
 # pylint: disable=missing-function-docstring
 # pylint: disable=missing-class-docstring
+# pylint: disable=too-few-public-methods
 
 from pathlib import Path
 

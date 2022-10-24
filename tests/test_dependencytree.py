@@ -4,14 +4,17 @@
 from pathlib import Path
 
 import pytest
-from anytree import Node
+from anytree.search import find
 
 from tcclitools.dependencytree import (
     DependencyTree,
     MissingLibrariesError,
+    TcNode,
     get_all_solutions,
+    render_tree,
 )
-from tcclitools.tclibrary import TcLibraryReference
+from tcclitools.tclibraryreference import TcLibraryReference
+from tcclitools.tcplcproject import TcPlcProject
 from tcclitools.tcsolution import TcSolution
 
 RESOURCE_PATH = Path(".") / "tests" / "resources"
@@ -22,33 +25,65 @@ DEP_ON_LIB_A = TcSolution(
 )
 
 
+def test_generate_simple_dependency_tree() -> None:
+    solution = TcSolution(RESOURCE_PATH / "EmptySolution" / "EmptySolution.sln")
+    expected = TcNode(solution, children=[TcNode(next(solution.xae_projects))])
+    tree = DependencyTree(solution, {})
+    assert str(tree) == render_tree(expected)
+
+
 def test_generate_dependency_tree() -> None:
-    available_solutions = [LIB_A]
-    expected = Node(
-        DEP_ON_LIB_A.path,
-        solution=DEP_ON_LIB_A,
-        children=[Node(available_solutions[0].path, solution=available_solutions[0])],
+    # Should generate something similar to:
+    # TcSolution(".\ProjectDependingOnLibA\ProjectDependingOnLibA.sln")
+    # └── TcXaeProject(".\ProjectDependingOnLibA\ProjectDependingOnLibA\ProjectDependingOnLibA.tspproj")
+    #     └── TcPlcProject(".\ProjectDependingOnLibA\ProjectDependingOnLibA\Untitled1\Untitled1.plcproj")
+    #         └── LibA, * (Industrial Brains B.V.)
+    #             └── TcPlcProject(".\LibA\LibA\Untitled1\Untitled1.plcproj")
+    solution = DEP_ON_LIB_A
+    library = LIB_A
+    library_xae_project = next(library.xae_projects)
+    library_plc_project = next(library_xae_project.plc_projects)
+    solution_xae_project = next(solution.xae_projects)
+    solution_plc_project = next(solution_xae_project.plc_projects)
+    expected = TcNode(
+        solution,
+        children=[
+            TcNode(
+                solution_xae_project,
+                children=[
+                    TcNode(
+                        solution_plc_project,
+                        children=[
+                            TcNode(
+                                list(solution.library_references)[0],
+                                children=[TcNode(library_plc_project)],
+                            )
+                        ],
+                    )
+                ],
+            )
+        ],
     )
-    tree = DependencyTree(DEP_ON_LIB_A, available_solutions)
-    assert str(tree.trunk) == str(expected)
+    tree = DependencyTree(solution, {library})
+    assert str(tree) == render_tree(expected)
 
 
 def test_dependency_tree_latest_version() -> None:
-    available_solutions = [
-        LIB_A,
-        TcSolution(RESOURCE_PATH / "LibA_Newer" / "LibA.sln"),
-    ]
+    libraries = [LIB_A, TcSolution(RESOURCE_PATH / "LibA_Newer" / "LibA.sln")]
 
     # The latest version should be selected
-    expected = Node(
-        DEP_ON_LIB_A.path,
-        solution=DEP_ON_LIB_A,
-        children=[Node(available_solutions[1].path, solution=available_solutions[1])],
-    )
+    expected = next(next(libraries[1].xae_projects).plc_projects)
 
-    tree = DependencyTree(DEP_ON_LIB_A, available_solutions)
+    tree = DependencyTree(DEP_ON_LIB_A, libraries)
 
-    assert str(tree.trunk) == str(expected)
+    # The last node should be the selected library
+    libnode: TcNode = find(tree.trunk, lambda node: len(node.children) == 0)
+    assert libnode.origin == expected
+
+    # Reversing order of libraries should not matter
+    tree = DependencyTree(DEP_ON_LIB_A, libraries[::-1])
+    libnode = find(tree.trunk, lambda node: len(node.children) == 0)
+    assert libnode.origin == expected
 
 
 def test_dependency_tree_missing_libraries() -> None:
@@ -69,7 +104,7 @@ def test_get_build_order() -> None:
     lib_a = LIB_A
     lib_b = TcSolution(RESOURCE_PATH / "LibB" / "LibB.sln")  # depends on A
     available_solutions = [lib_a, lib_b]
-    expected = [lib_a, lib_b, target_solution]
+    expected = [next(lib_a.plc_projects), next(lib_b.plc_projects), target_solution]
     build_order = DependencyTree(target_solution, available_solutions).get_build_order()
     assert build_order == expected
 
@@ -77,3 +112,19 @@ def test_get_build_order() -> None:
 def test_get_build_order_missing_library() -> None:
     with pytest.raises(MissingLibrariesError):
         DependencyTree(DEP_ON_LIB_A).get_build_order()
+
+
+def test_multiple_libraries_in_one_solution() -> None:
+    path = RESOURCE_PATH / "MultipleLibraries"
+    target_solution = TcSolution(
+        path / "ProjectDependingOnLibA" / "ProjectDependingOnLibA.sln"
+    )
+    library_solution = TcSolution(
+        path / "ProjectWithLibAandB" / "ProjectWithLibAandB.sln"
+    )
+    library = TcPlcProject(
+        path / "ProjectWithLibAandB" / "ProjectWithLibAandB" / "LibA" / "LibA.plcproj"
+    )
+    expected = [library, target_solution]
+    build_order = DependencyTree(target_solution, [library_solution]).get_build_order()
+    assert build_order == expected

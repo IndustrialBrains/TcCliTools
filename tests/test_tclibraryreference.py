@@ -2,14 +2,14 @@
 # pylint: disable=missing-function-docstring
 
 import pytest
-from packaging import version as version_module
+from packaging.version import Version
 
 from tcclitools.tclibraryreference import TcLibraryReference
 
 TITLE = "foo"
 COMPANY = "bar"
 VERSION_STR = "1"
-VERSION = version_module.Version(VERSION_STR)
+VERSION = Version(VERSION_STR)
 
 
 def test_compare_eq() -> None:

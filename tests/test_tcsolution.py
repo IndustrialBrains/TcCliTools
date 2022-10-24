@@ -3,6 +3,7 @@
 
 from pathlib import Path
 
+from tcclitools.tcplcproject import TcPlcProject
 from tcclitools.tcsolution import TcSolution
 from tcclitools.tcxaeproject import TcXaeProject
 
@@ -16,4 +17,24 @@ def test_get_xae_projects() -> None:
         TcXaeProject(path / "TwinCAT Project1" / "TwinCAT Project1.tsproj"),
         TcXaeProject(path / "TwinCAT Project2" / "TwinCAT Project2.tsproj"),
     }
-    assert expected == solution.xae_projects
+    assert expected == set(solution.xae_projects)
+
+
+def test_get_plc_projects() -> None:
+    path = RESOURCE_PATH / "MultiplePlcs"
+    solution = TcSolution(path / "MultiplePlcs.sln")
+    expected = {
+        TcPlcProject(path / "MultiplePlcs" / "PLC1" / "PLC1.plcproj"),
+        TcPlcProject(path / "MultiplePlcs" / "PLC2" / "PLC2.plcproj"),
+    }
+    assert expected == set(solution.plc_projects)
+
+
+# def test_get_libraries() -> None:
+#     path = RESOURCE_PATH / "MultipleLibraries" / "ProjectWithLibAandB"
+#     solution = TcSolution(path / "ProjectWithLibAandB.sln")
+#     expected = {
+#         TcLibrary(path / "ProjectWithLibAandB" / "LibA" / "LibA.plcproj"),
+#         TcLibrary(path / "ProjectWithLibAandB" / "LibB" / "LibB.plcproj"),
+#     }
+#     assert expected == solution.libraries
