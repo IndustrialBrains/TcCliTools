@@ -69,22 +69,22 @@ class TcLibrary(TcLibraryReference, UniquePath):
         """Return a TcLibraryReference instance"""
         return TcLibraryReference(self.title, self.version, self.company)
 
-    @staticmethod
-    def get_library_repository(
-        tc_path: Path = Path("C:\\TwinCAT\\3.1\\Components\\Plc\\Managed Libraries"),
-    ) -> list[TcLibrary]:
-        """Return libraries from a library repository.
-        Defaults to the `C:\\TwinCAT\\3.1\\Components\\Plc\\Managed Libraries` folder."""
-
-        if not tc_path.exists():
-            raise FileNotFoundError(f"Path '{tc_path}' does not exist!")
-
-        libs = []
-        for path in tc_path.glob("**/browsercache"):
-            libs.append(TcLibrary(path.parent))
-
-        return libs
-
     def __hash__(self) -> int:  # pylint:disable=useless-parent-delegation
         # https://stackoverflow.com/questions/53518981/inheritance-hash-sets-to-none-in-a-subclass
         return super().__hash__()
+
+
+def get_library_repository(
+    tc_path: Path = Path("C:\\TwinCAT\\3.1\\Components\\Plc\\Managed Libraries"),
+) -> list[TcLibrary]:
+    """Return libraries from a library repository.
+    Defaults to the `C:\\TwinCAT\\3.1\\Components\\Plc\\Managed Libraries` folder."""
+
+    if not tc_path.exists():
+        raise FileNotFoundError(f"Path '{tc_path}' does not exist!")
+
+    libs = []
+    for path in tc_path.glob("**/browsercache"):
+        libs.append(TcLibrary(path.parent))
+
+    return libs

@@ -5,7 +5,7 @@ from pathlib import Path
 
 from packaging import version as version_module
 
-from tcclitools.tclibrary import TcLibrary
+from tcclitools.tclibrary import TcLibrary, get_library_repository
 from tcclitools.tclibraryreference import TcLibraryReference
 
 RESOURCE_PATH = Path(".") / "tests" / "resources"
@@ -52,4 +52,4 @@ def test_library_from_repository() -> None:
 
 def test_all_libraries_in_repository() -> None:
     path = RESOURCE_PATH / "Managed Libraries"
-    assert len(TcLibrary.get_library_repository(path)) == 2
+    assert len(get_library_repository(path)) == 2
