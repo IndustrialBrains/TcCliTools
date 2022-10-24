@@ -1,5 +1,6 @@
 """Tests for the tcclitools TcSolution class"""
 # pylint: disable=missing-function-docstring
+# pylint: disable=line-too-long
 
 from pathlib import Path
 

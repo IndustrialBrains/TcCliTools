@@ -169,7 +169,7 @@ class DependencyTree:
         # add the last build: the solution itself
         build_order.extend([self.trunk.origin])  # type:ignore
 
-        return build_order  # type:ignore
+        return build_order
 
 
 def get_all_solutions(path: Path) -> Iterable[TcSolution]:

@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Iterable
+from typing import Any, Iterable
 
 from defusedxml import ElementTree
 
@@ -14,10 +14,12 @@ from .uniquepath import UniquePath
 class TcXaeProject(UniquePath, TcTreeItem):  # pylint:disable=too-few-public-methods
     """A TwinCAT XAE Project"""
 
-    def __init__(self, path: Path, parent: TcTreeItem | None = None):
-        TcTreeItem.__init__(self, parent)
+    def __init__(
+        self, path: Path, parent: Any = None, children: Iterable[Any] | None = None
+    ):
         self._allowed_types = [".tsproj", ".tspproj"]
         UniquePath.__init__(self, path)
+        TcTreeItem.__init__(self, parent=parent, children=children)
         self.xmlroot = ElementTree.parse(path).getroot()
         self._plc_projects: set[TcPlcProject] | None = None
 
@@ -30,13 +32,13 @@ class TcXaeProject(UniquePath, TcTreeItem):  # pylint:disable=too-few-public-met
                 if "PrjFilePath" in project.attrib:
                     projects.append(
                         TcPlcProject(
-                            self.path.parent / project.attrib["PrjFilePath"],
+                            self.filepath.parent / project.attrib["PrjFilePath"],
                             parent=self,
                         )
                     )
                 elif "File" in project.attrib:
                     # Independent project file
-                    xti_path = self.path.parent / "_Config" / "PLC"
+                    xti_path = self.filepath.parent / "_Config" / "PLC"
                     xti_file = xti_path / project.attrib["File"]
                     if not xti_file.exists():
                         raise FileNotFoundError(

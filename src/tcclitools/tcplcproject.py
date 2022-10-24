@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Iterable
+from typing import Any, Iterable
 
 from defusedxml import ElementTree
 from packaging.version import InvalidVersion, parse
@@ -15,10 +15,12 @@ from .uniquepath import UniquePath
 class TcPlcProject(UniquePath, TcTreeItem):  # pylint:disable=too-few-public-methods
     """A TwinCAT PLC Project"""
 
-    def __init__(self, path: Path, parent: TcTreeItem | None = None):
-        TcTreeItem.__init__(self, parent)
+    def __init__(
+        self, path: Path, parent: Any = None, children: Iterable[Any] | None = None
+    ):
         self._allowed_types = [".plcproj"]
-        super().__init__(path)
+        UniquePath.__init__(self, path)
+        TcTreeItem.__init__(self, parent=parent, children=children)
         self.xmlroot = ElementTree.parse(path).getroot()
         self._library_references: set[TcLibraryReference] | None = None
 

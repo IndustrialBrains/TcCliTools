@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Iterable
+from typing import Any, Iterable
 
 from .tclibraryreference import TcLibraryReference
 from .tcplcproject import TcPlcProject
@@ -17,10 +17,10 @@ class TcSolution(UniquePath, TcTreeItem):
 
     _REGEX_PROJECT_FILE = re.compile(r'Project\("\{.*?\}"\).*?,\s"(.+tsp{1,2}roj)"')
 
-    def __init__(self, path: Path):
-        TcTreeItem.__init__(self)
+    def __init__(self, path: Path, children: Iterable[Any] | None = None):
         self._allowed_types = [".sln"]
         UniquePath.__init__(self, path)
+        TcTreeItem.__init__(self, parent=None, children=children)
         self._xae_projects: set[TcXaeProject] | None = None
         self._plc_projects: set[TcPlcProject] | None = None
         self._library_references: set[TcLibraryReference] | None = None
@@ -30,12 +30,14 @@ class TcSolution(UniquePath, TcTreeItem):
         """XAE projects in the solution"""
         if self._xae_projects is None:
             projects = []
-            with self.path.open("r", encoding="utf-8") as file:
+            with self.filepath.open("r", encoding="utf-8") as file:
                 for line in file.readlines():
                     match = self._REGEX_PROJECT_FILE.match(line)
                     if match:
                         projects.append(
-                            TcXaeProject(self.path.parent / match.group(1), parent=self)
+                            TcXaeProject(
+                                self.filepath.parent / match.group(1), parent=self
+                            )
                         )
             self._xae_projects = set(projects)
         return iter(self._xae_projects)
