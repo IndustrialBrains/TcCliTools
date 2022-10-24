@@ -20,7 +20,7 @@ class TcXaeProject(UniquePath):  # pylint:disable=too-few-public-methods
 
     @property
     def plc_projects(self) -> set[TcPlcProject]:
-        """Get PLC projects in the XAE project"""
+        """PLC projects in the XAE project"""
         if self._plc_projects is None:
             projects: list[TcPlcProject] = []
             for project in self.xmlroot.findall(".//{*}Plc/Project"):

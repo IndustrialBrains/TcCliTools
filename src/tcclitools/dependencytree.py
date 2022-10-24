@@ -19,8 +19,7 @@ class DependencyTree:
         libraries: Iterable[TcSolution | TcLibrary | TcLibraryReference] | None = None,
     ) -> None:
         """Build a dependency tree for `root_solution`.
-        The required libraries will be retrieved from `library_solutions`,
-        except for library references in `ignored_libraries`."""
+        The required libraries will be retrieved from `libraries`"""
 
         # Build a list of available library references and include the solution if available
         available_libraries: list[tuple[TcSolution | None, TcLibraryReference]] = []
@@ -124,6 +123,7 @@ class DependencyTree:
         return build_order
 
 
-def get_all_solutions(path: Path) -> list[TcSolution]:
-    """Return a list of all solutions in a folder (including subfolders)"""
-    return [TcSolution(path=solution_path) for solution_path in path.glob("**/*.sln")]
+def get_all_solutions(path: Path) -> Iterable[TcSolution]:
+    """Return all solutions in a folder (including subfolders)"""
+    for solution_path in path.glob("**/*.sln"):
+        yield TcSolution(path=solution_path)

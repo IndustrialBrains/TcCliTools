@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Iterable
 
 from defusedxml import ElementTree
 from packaging import version as version_module
@@ -76,15 +77,10 @@ class TcLibrary(TcLibraryReference, UniquePath):
 
 def get_library_repository(
     tc_path: Path = Path("C:\\TwinCAT\\3.1\\Components\\Plc\\Managed Libraries"),
-) -> list[TcLibrary]:
+) -> Iterable[TcLibrary]:
     """Return libraries from a library repository.
     Defaults to the `C:\\TwinCAT\\3.1\\Components\\Plc\\Managed Libraries` folder."""
-
     if not tc_path.exists():
         raise FileNotFoundError(f"Path '{tc_path}' does not exist!")
-
-    libs = []
     for path in tc_path.glob("**/browsercache"):
-        libs.append(TcLibrary(path.parent))
-
-    return libs
+        yield TcLibrary(path.parent)

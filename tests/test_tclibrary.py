@@ -52,4 +52,4 @@ def test_library_from_repository() -> None:
 
 def test_all_libraries_in_repository() -> None:
     path = RESOURCE_PATH / "Managed Libraries"
-    assert len(get_library_repository(path)) == 2
+    assert len(list(get_library_repository(path))) == 2

@@ -22,7 +22,7 @@ class TcSolution(UniquePath):
 
     @property
     def xae_projects(self) -> set[TcXaeProject]:
-        """Get XAE projects referenced by the solution"""
+        """XAE projects referenced by the solution"""
         if self._xae_projects is None:
             projects = []
             with self.path.open("r", encoding="utf-8") as file:

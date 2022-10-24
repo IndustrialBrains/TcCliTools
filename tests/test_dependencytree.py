@@ -22,7 +22,7 @@ DEP_ON_LIB_A = TcSolution(
 )
 
 
-def test_build_dependency_tree() -> None:
+def test_generate_dependency_tree() -> None:
     available_solutions = [LIB_A]
     expected = Node(
         DEP_ON_LIB_A.path,
@@ -59,7 +59,7 @@ def test_dependency_tree_missing_libraries() -> None:
 
 def test_get_all_solutions() -> None:
     path = RESOURCE_PATH / "Solution"
-    assert get_all_solutions(path) == [TcSolution(path / "Solution.sln")]
+    assert list(get_all_solutions(path)) == [TcSolution(path / "Solution.sln")]
 
 
 def test_get_build_order() -> None:
