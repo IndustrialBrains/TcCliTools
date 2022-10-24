@@ -28,13 +28,3 @@ def test_get_plc_projects() -> None:
         TcPlcProject(path / "MultiplePlcs" / "PLC2" / "PLC2.plcproj"),
     }
     assert expected == set(solution.plc_projects)
-
-
-# def test_get_libraries() -> None:
-#     path = RESOURCE_PATH / "MultipleLibraries" / "ProjectWithLibAandB"
-#     solution = TcSolution(path / "ProjectWithLibAandB.sln")
-#     expected = {
-#         TcLibrary(path / "ProjectWithLibAandB" / "LibA" / "LibA.plcproj"),
-#         TcLibrary(path / "ProjectWithLibAandB" / "LibB" / "LibB.plcproj"),
-#     }
-#     assert expected == solution.libraries

@@ -52,15 +52,3 @@ class TcSolution(UniquePath, TcTreeItem):
                 for plc_project in xae_project.plc_projects
             }
         return iter(self._plc_projects)
-
-    @property
-    def library_references(self) -> Iterable[TcLibraryReference]:
-        """Libraries referenced by the solution"""
-        if self._library_references is None:
-            self._library_references = {
-                library
-                for xae_project in self.xae_projects
-                for plc_project in xae_project.plc_projects
-                for library in plc_project.library_references
-            }
-        return iter(self._library_references)

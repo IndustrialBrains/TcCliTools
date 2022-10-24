@@ -42,10 +42,10 @@ def test_generate_dependency_tree() -> None:
     #             └── TcPlcProject(".\LibA\LibA\Untitled1\Untitled1.plcproj")
     solution = DEP_ON_LIB_A
     library = LIB_A
-    library_xae_project = next(library.xae_projects)
-    library_plc_project = next(library_xae_project.plc_projects)
-    solution_xae_project = next(solution.xae_projects)
-    solution_plc_project = next(solution_xae_project.plc_projects)
+    library_xae_project = list(library.xae_projects)[0]
+    library_plc_project = list(library_xae_project.plc_projects)[0]
+    solution_xae_project = list(solution.xae_projects)[0]
+    solution_plc_project = list(solution_xae_project.plc_projects)[0]
     expected = TcNode(
         solution,
         children=[
@@ -56,7 +56,7 @@ def test_generate_dependency_tree() -> None:
                         solution_plc_project,
                         children=[
                             TcNode(
-                                list(solution.library_references)[0],
+                                list(solution_plc_project.library_references)[0],
                                 children=[TcNode(library_plc_project)],
                             )
                         ],
